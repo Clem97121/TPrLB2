@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace MyConsoleApp
 {
@@ -7,15 +6,18 @@ namespace MyConsoleApp
     {
         static void Main(string[] args)
         {
-            // Создаем экземпляр менеджера задач
-            var taskManager = new TaskManager();
+            // Создаем экземпляр хранилища задач
+            var taskRepository = new InMemoryTaskRepository();
+
+            // Создаем экземпляр менеджера задач с внедрением зависимости хранилища
+            var taskManager = new TaskManager(taskRepository);
 
             // Добавляем задачи
             taskManager.AddTask(new Task { Title = "Task 1", Description = "Description for Task 1" });
             taskManager.AddTask(new Task { Title = "Task 2", Description = "Description for Task 2" });
 
             // Отмечаем первую задачу как выполненную
-            var taskToComplete = taskManager.GetTaskByTitle("Task 1");
+            var taskToComplete = taskRepository.GetTaskByTitle("Task 1");
             if (taskToComplete != null)
             {
                 taskManager.MarkAsCompleted(taskToComplete);
